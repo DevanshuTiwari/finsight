@@ -5,6 +5,21 @@ spring:
   application:
     name: api-gateway
 
+  cloud:
+    gateway:
+      routes:
+        # Route for the User Service
+        - id: user-service-route
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/users/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: "${JWT_SECRET_KEY}"
+
 eureka:
   client:
     service-url:
