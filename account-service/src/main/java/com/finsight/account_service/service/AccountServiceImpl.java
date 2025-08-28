@@ -9,10 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    private final FileProcessingService fileProcessingService;
+    private final CsvFileProcessingService fileProcessingService;
 
     @Autowired
-    public AccountServiceImpl(FileProcessingService fileProcessingService) {
+    public AccountServiceImpl(CsvFileProcessingService fileProcessingService) {
         this.fileProcessingService = fileProcessingService;
     }
 

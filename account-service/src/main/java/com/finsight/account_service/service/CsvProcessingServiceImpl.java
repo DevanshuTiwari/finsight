@@ -22,11 +22,11 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CsvProcessingService implements FileProcessingService {
+public class CsvProcessingServiceImpl implements CsvFileProcessingService {
 
     private final TransactionRepository transactionRepository;
 
-    public CsvProcessingService(TransactionRepository transactionRepository) {
+    public CsvProcessingServiceImpl(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
