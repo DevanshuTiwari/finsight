@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import java.util.Base64;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -37,8 +39,12 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
+
+        // Decode the Base64-encoded secret key
+        byte[] keyBytes = Base64.getDecoder().decode(jwtSecretKey);
+
         // Create a SecretKey object from our secret string
-        SecretKey secretKey = new SecretKeySpec(jwtSecretKey.getBytes(), "HmacSHA256");
+        SecretKey secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");
 
         // Build and return the decoder
         return NimbusJwtDecoder.withSecretKey(secretKey).build();
