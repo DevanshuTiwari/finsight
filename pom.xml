@@ -15,6 +15,7 @@
         <module>service-registry</module>
         <module>api-gateway</module>
         <module>user-service</module>
+        <module>account-service</module>
     </modules>
 
     <properties>
