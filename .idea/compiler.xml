@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
         <module name="service-registry" />
+        <module name="transaction-processor-service" />
       </profile>
       <profile name="Annotation profile for finsight-parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />

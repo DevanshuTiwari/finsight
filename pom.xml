@@ -16,6 +16,7 @@
         <module>api-gateway</module>
         <module>user-service</module>
         <module>account-service</module>
+        <module>transaction-processor-service</module>
     </modules>
 
     <properties>
