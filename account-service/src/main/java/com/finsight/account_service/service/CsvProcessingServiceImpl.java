@@ -1,6 +1,7 @@
 package com.finsight.account_service.service;
 
 
+import com.finsight.account_service.dto.TransactionCreatedEvent;
 import com.finsight.account_service.exception.CsvProcessingException;
 import com.finsight.account_service.model.Transaction;
 import com.finsight.account_service.repository.TransactionRepository;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,9 +27,11 @@ import java.util.List;
 public class CsvProcessingServiceImpl implements CsvFileProcessingService {
 
     private final TransactionRepository transactionRepository;
+    private final KafkaTemplate<String, TransactionCreatedEvent> kafkaTemplate;
 
-    public CsvProcessingServiceImpl(TransactionRepository transactionRepository) {
+    public CsvProcessingServiceImpl(TransactionRepository transactionRepository, KafkaTemplate<String, TransactionCreatedEvent> kafkaTemplate) {
         this.transactionRepository = transactionRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public int processCsvFile(MultipartFile file, Long userId) {
@@ -80,7 +84,10 @@ public class CsvProcessingServiceImpl implements CsvFileProcessingService {
             }
 
             // 5. Save all valid transactions to the database in one batch
-            transactionRepository.saveAll(transactions);
+            List<Transaction> savedTransactions = transactionRepository.saveAll(transactions);
+
+            savedTransactions.forEach(this::publishTransactionEvent);
+            log.info("Successfully processed {} transactions for user {}", savedTransactions.size(), userId);
             return transactions.size();
 
         } catch (Exception e) {
@@ -89,4 +96,18 @@ public class CsvProcessingServiceImpl implements CsvFileProcessingService {
         }
     }
 
+    // Method to publish transaction event to Kafka
+    private void publishTransactionEvent(Transaction transaction) {
+        TransactionCreatedEvent event = new TransactionCreatedEvent(
+                transaction.getId(),
+                transaction.getUserId(),
+                transaction.getDescription(),
+                transaction.getAmount(),
+                transaction.getTransactionDate()
+        );
+
+        // Send the event to the "raw-transactions" topic
+        kafkaTemplate.send("raw-transactions", event);
+        log.info("Published event for transaction ID: {}", transaction.getId());
+    }
 }
