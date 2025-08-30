@@ -8,8 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
-        <module name="service-registry" />
         <module name="transaction-processor-service" />
+        <module name="account-service" />
+        <module name="common-dto" />
+        <module name="service-registry" />
       </profile>
       <profile name="Annotation profile for finsight-parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -18,17 +20,22 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="account-service" />
         <module name="user-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common-dtos" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="account-service" options="" />
-      <module name="api-gateway" options="" />
-      <module name="service-registry" options="" />
-      <module name="user-service" options="" />
+      <module name="account-service" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="common-dto" options="-parameters" />
+      <module name="common-dtos" options="-parameters" />
+      <module name="service-registry" options="-parameters" />
+      <module name="transaction-processor-service" options="-parameters" />
+      <module name="user-service" options="-parameters" />
     </option>
   </component>
 </project>

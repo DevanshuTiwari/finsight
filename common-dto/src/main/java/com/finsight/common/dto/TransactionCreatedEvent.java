@@ -1,5 +1,4 @@
-package com.finsight.transaction_processor_service.dto;
-
+package com.finsight.common.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,4 +11,3 @@ public record TransactionCreatedEvent(
         LocalDate transactionDate
 ) {
 }
-
